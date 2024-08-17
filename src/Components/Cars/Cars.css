@@ -1,15 +1,83 @@
-.cars-container{
+th,td{
+    width: 250px;
+    border: 1px solid blue;
+    height: 30px;
+}
+.model{
     max-width: 1200px;
     margin: 0 auto;
-    list-style: none;
     padding: 20px;
 }
-.cars-list{
-    display: flex;
-    align-items: center;
-    gap: 50px;
-    list-style: none;
+.model-input{
+    border: 1px solid blue;
+    width: 250px;
+    height: 40px;
+    /* margin-left: 2px; */
+    text-align: center;
 }
-.cars-title{
-    font-size: 25px;
+.model-select{
+    border: 1px solid blue;
+    width: 250px;
+    height: 40px;
+    margin-left: 1px;
+}
+.model-btn{
+    width: 250px;
+    height: 40px;
+    background: blue;
+    color: #FFFF;
+    margin-left: 1px;
+    border: 1px solid blue;
+    margin-bottom: 6px;
+}
+.model-btn:hover{
+    transform: scale(0.98);
+    transition: 1s;
+    background: red;
+    border: 1px solid #FFFF;
+}
+.model-input:hover{
+    color: #FFFF;
+    text-align: center;
+    transform: scale(0.98);
+    transition: 1s;
+    background: blue;
+    border: 1px solid #FFFF;
+}
+.model-select:hover{
+    color: #FFFF;
+    transform: scale(0.98);
+    transition: 1s;
+    background: blue;
+    border: 1px solid #FFFF;
+}
+.td{
+    border: none;
+    /* text-align: center; */
+}
+.model-btn-a{
+    background-color: blue;
+    color: #FFFF;
+    border: 1px solid blue;
+    width: 250px;
+    border-radius: 1px;
+}
+.model-btn-b{
+    background-color: red;
+    border: 1px solid red;
+    width: 250px;
+    border-radius: 1px;
+    color: #FFFF;
+}
+.th-a{
+    background-color: rgb(227, 18, 81);
+    color: #FFFF;
+}
+.th-b{
+    background-color: green;
+    color: #FFFF;
+}
+.th-c{
+    background-color: brown;
+    color: #FFFF;
 }
