@@ -1,12 +1,14 @@
 .cars-container{
     max-width: 1200px;
     margin: 0 auto;
+    list-style: none;
     padding: 20px;
 }
 .cars-list{
     display: flex;
     align-items: center;
     gap: 50px;
+    list-style: none;
 }
 .cars-title{
     font-size: 25px;
