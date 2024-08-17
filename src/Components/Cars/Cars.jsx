@@ -1,23 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import "./Cars.css";
 import axios from 'axios';
-import { message, Button, Modal, Form, Input } from 'antd';
+import { message, Button } from 'antd';
 
-const Cars = () => {
-    const [models, setModels] = useState([]);
+const Model = () => {
+    const [brandId, setBrandId] = useState('')
+    const [modelId, setModelId] = useState('')
+    const [categoryId, setCategoryId] = useState('')
+    const [locationId, setLocationId] = useState('')
+    const [color, setColor] = useState('')
+     
+
+    const [cars, setCars] = useState([]);
     const [brands, setBrands] = useState([]); 
-    const [categories, setCategories] = useState([]); 
-    const [locations, setLocations] = useState([]); 
+    const [models, setModels] = useState([]);
+    const [categories,setCategories] = useState([]);
+    const [locations,setLacations] = useState([]);
     const [name, setName] = useState('');
-    const [brandId, setBrandId] = useState('');
-    const [categoryId, setCategoryId] = useState('');
-    const [locationId, setLocationId] = useState('');
+    const [brandid, setBrandid] = useState('');
     const [hover, setHover] = useState(null);
-    const [open, setOpen] = useState(false);
 
-    const getModels = () => {
+    const getCars = () => {
         axios.get('https://autoapi.dezinfeksiyatashkent.uz/api/cars')
-            .then(res => setModels(res.data.data))
+            .then(res => setCars(res.data.data))
             .catch(err => console.error(err));
     };
 
@@ -26,35 +31,40 @@ const Cars = () => {
             .then(res => setBrands(res.data.data))
             .catch(err => console.error(err));
     };
-
+    const getModels = () => {
+        axios.get('https://autoapi.dezinfeksiyatashkent.uz/api/models')
+            .then(res => setModels(res.data.data))
+            .catch(err => console.error(err));
+    };
     const getCategories = () => {
         axios.get('https://autoapi.dezinfeksiyatashkent.uz/api/categories')
             .then(res => setCategories(res.data.data))
             .catch(err => console.error(err));
     };
-
     const getLocations = () => {
         axios.get('https://autoapi.dezinfeksiyatashkent.uz/api/locations')
-            .then(res => setLocations(res.data.data))
+            .then(res => setLacations(res.data.data))
             .catch(err => console.error(err));
     };
 
     useEffect(() => {
-        getModels();
+        getCars();
         getBrands();
+        getModels();
         getCategories();
         getLocations();
     }, []);
 
-    const addModel = (values) => {
+    const addModel = (e) => {
+        e.preventDefault();
         const formData = new FormData();
-        formData.append('number', values.number);
-        formData.append('model_id', values.name);
-        formData.append('brand_id', values.brandId);
-        formData.append('categories_id', values.categoryId);
-        formData.append('locations_name', values.locationId);
+        formData.append('color', color)
+        formData.append('brand_id', brandId)
+        formData.append('model_id', modelId)
+        formData.append('category_id', categoryId)
+        formData.append('location_id', locationId)
 
-        const url = hover ? `https://autoapi.dezinfeksiyatashkent.uz/api/cars/${hover.id}` : `https://autoapi.dezinfeksiyatashkent.uz/api/cars`;
+        const url = hover ? `https://autoapi.dezinfeksiyatashkent.uz/api/models/${hover.id}` : `https://autoapi.dezinfeksiyatashkent.uz/api/models`;
         const method = hover ? 'PUT' : 'POST';
 
         axios({
@@ -70,10 +80,7 @@ const Cars = () => {
                 hover ? message.success("Updated successfully") : message.success("Added successfully");
                 setHover(null); 
                 setName(''); 
-                setBrandId(''); 
-                setCategoryId('');
-                setLocationId('');
-                setOpen(false);
+                setBrandid(''); 
                 getModels();
             }
         })
@@ -84,7 +91,7 @@ const Cars = () => {
 
     const deleteModel = (id) => {
         axios({
-            url: `https://autoapi.dezinfeksiyatashkent.uz/api/cars/${id}`,
+            url: `https://autoapi.dezinfeksiyatashkent.uz/api/models/${id}`,
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -99,105 +106,68 @@ const Cars = () => {
         });
     };
 
-    const showModal = (item = null) => {
-        if (item) {
-            setHover(item);
-            setName(item.name);
-            setBrandId(item.brand_id);
-            setCategoryId(item.category_id);
-            setLocationId(item.location_id);
-        } else {
-            setHover(null);
-            setName('');
-            setBrandId('');
-            setCategoryId('');
-            setLocationId('');
-        }
-        setOpen(true);
-    };
-
-    const closeModal = () => {
-        setOpen(false);
-        setHover(null);
-        setName('');
-        setBrandId('');
-        setCategoryId('');
-        setLocationId('');
+    const showModal = (item) => {
+        setHover(item);
+        setName(item.name);
+        setBrandid(item.brand_id);
     };
 
     return (
         <div className='model'>
-            <Button className="home-btn" onClick={() => showModal()}>Shahar Qushish</Button>
-            <Modal open={open} footer={null} onCancel={closeModal}>
-                <Form onFinish={addModel} initialValues={hover || {}}>
-                    <Form.Item
-                        className="home-item-a"
-                        label="Name"
-                        name="name"
-                        rules={[{ required: true, message: 'Please input the name!' }]}
-                    >
-                        <Input className="home-input-a" placeholder="Name" />
-                    </Form.Item>
-                    <Form.Item
-                        className="home-item-b"
-                        label="Brand"
-                        name="brandId"
-                        rules={[{ required: true, message: 'Please select a brand!' }]}
-                    >
-                        <Input className="home-input-b" placeholder="Brand ID" />
-                    </Form.Item>
-                    <Form.Item
-                        className="home-item-b"
-                        label="Model"
-                        name="brandId"
-                        rules={[{ required: true, message: 'Please select a brand!' }]}
-                    >
-                        <Input className="home-input-b" placeholder="Model ID" />
-                    </Form.Item>
-                    <Form.Item
-                        className="home-item-c"
-                        label="Category"
-                        name="categoryId"
-                        rules={[{ required: true, message: 'Please select a category!' }]}
-                    >
-                        <Input className="home-input-c" placeholder="Category ID" />
-                    </Form.Item>
-                    <Form.Item
-                        className="home-item-d"
-                        label="Location"
-                        name="locationId"
-                        rules={[{ required: true, message: 'Please select a location!' }]}
-                    >
-                        <Input className="home-input-d" placeholder="Location ID" />
-                    </Form.Item>
-                    <Form.Item className="home-item-e">
-                        <Button htmlType="submit" className="home-btn-d">
-                            Submit
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </Modal>
+            {/* ----------------------------------------------Brand----------------------------------------------------------------- */}
+                  <select onChange={(e) => setBrandId(e.target.value)} defaultValue="">
+            <option value="" disabled style={{display:"none"}}>Brand</option>
+            {
+                brands && brands.map((brand,index)=>(
+                    <option key={index} value={brand.id}>{brand.title}</option>
+                ))
+            }
+        </select>
+        <select onChange={(e) => setModelId(e.target.value)} defaultValue="">
+            <option value="" disabled style={{display:"none"}}>Model</option>
+            {
+                models && models.map((model,index)=>(
+                    <option key={index} value={model.id}>{model.name}</option>
+                ))
+            }
+        </select>
+        <select onChange={(e) => setCategoryId(e.target.value)} defaultValue="">
+            <option value="" disabled style={{display:"none"}}>Category</option>
+            {
+                categories && categories.map((category,index)=>(
+                    <option key={index} value={category.id}>{category.name_en}</option>
+                ))
+            }
+        </select>
+        <select onChange={(e) => setLocationId(e.target.value)} defaultValue="">
+            <option value="" disabled style={{display:"none"}}>Location</option>
+            {
+                locations && locations.map((location,index)=>(
+                    <option key={index} value={location.id}>{location.name}</option>
+                ))
+            }
+        </select>
+            {/* --------------------------------------------------Button------------------------------------------------------------ */}
+            <button className='model-btn' onClick={addModel}>
+                {hover ? 'Update' : 'Add'}
+            </button>
             <table>
                 <thead>
                     <tr>
-                        <th className='th-b'>Brand</th>
                         <th className='th-a'>Model</th>
-                        <th className='th-b'>Kategoriya</th>
-                        <th className='th-b'>Lokatsiya</th>
-                        <th className='th-c'>Action</th>
+                        <th className='th-b'>Brand</th>
+                        <th className='th-c'>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {
                         models && models.map((item, index) => (
                             <tr key={index}>
-                                <td>{item.brand_id}</td>
-                                <td>{item.model_id}</td>
-                                <td>{item.category_id}</td>
-                                <td>{item.location_id}</td>
+                                <td>{item.name}</td>
+                                <td>{item.brand_title}</td>
                                 <td className='td'>
-                                    <Button className='model-btn-a' onClick={() => showModal(item)}>Edit</Button> 
-                                    <Button className='model-btn-b' onClick={() => deleteModel(item.id)}>Delete</Button>
+                                    <Button className='model-btn-a'onClick={() => showModal(item)}>Edit</Button> 
+                                    <Button className='model-btn-b'onClick={() => deleteModel(item.id)}>Delete</Button>
                                 </td>
                             </tr>
                         ))
@@ -208,4 +178,9 @@ const Cars = () => {
     );
 };
 
-export default Cars;
+export default Model;
+
+
+
+
+
