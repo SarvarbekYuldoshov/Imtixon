@@ -9,6 +9,8 @@ const Cars = () => {
     const [categoryId, setCategoryId] = useState('');
     const [locationId, setLocationId] = useState('');
     const [cityId, setCityId] = useState('');
+
+    
     const [cars, setCars] = useState([]);
     const [brands, setBrands] = useState([]);
     const [models, setModels] = useState([]);
@@ -125,34 +127,6 @@ const Cars = () => {
             message.error("Error occurred");
         });
     };
-
-    const handleSubmit = (values) => {
-        const formData = new FormData();
-        formData.append('name', values.name);
-        formData.append('text', values.text);
-
-        axios({
-            url: currentCity 
-                ? `https://autoapi.dezinfeksiyatashkent.uz/api/cities/${currentCity.id}` 
-                : 'https://autoapi.dezinfeksiyatashkent.uz/api/cities',
-            method: currentCity ? 'PUT' : 'POST',
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            },
-            data: formData,
-        })
-        .then(res => {
-            if (res.data.success) {
-                message.success(currentCity ? "Updated successfully" : "Added successfully");
-                setOpen(false);
-                getCars();
-                form.resetFields();
-                setCurrentCity(null);
-            }
-        })
-        .catch(err => console.log(err));
-    };
-
     const showModal = (item) => {
         setOpen(true);
         setCurrentCity(item);
