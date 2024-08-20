@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import "./Cars.css";
 import axios from 'axios';
-import { message, Button, Table, Modal, Form, Input } from 'antd';
+import { message, Button, Table, Modal, Form } from 'antd';
 
 const Cars = () => {
     const [brandId, setBrandId] = useState('');
@@ -9,17 +9,41 @@ const Cars = () => {
     const [categoryId, setCategoryId] = useState('');
     const [locationId, setLocationId] = useState('');
     const [cityId, setCityId] = useState('');
-
+    
+    const [color, setColor] = useState('');
+    const [year, setYear] = useState('');
+    const [seconds, setSeconds] = useState('');
+    const [maxSpeed, setMaxSpeed] = useState('');
+    const [maxPeople, setMaxPeople] = useState('');
+    const [transmission, setTransmission] = useState('');
+    const [motor, setMotor] = useState('');
+    const [driveSide, setDriveSide] = useState('');
+    const [petrol, setPetrol] = useState('');
+    const [limitPerDay, setLimitPerDay] = useState('');
+    const [deposit, setDeposit] = useState('');
+    const [premiumProtection, setPremiumProtection] = useState('');
+    const [priceInAed, setPriceInAed] = useState('');
+    const [priceInUsd, setPriceInUsd] = useState('');
+    const [priceInAedSale, setPriceInAedSale] = useState('');
+    const [priceInUsdSale, setPriceInUsdSale] = useState('');
+    const [inclusive, setInclusive] = useState('');
     
     const [cars, setCars] = useState([]);
     const [brands, setBrands] = useState([]);
     const [models, setModels] = useState([]);
     const [categories, setCategories] = useState([]);
     const [locations, setLocations] = useState([]);
-    const [name, setName] = useState('');
-    const [currentCity, setCurrentCity] = useState(null);
+    const [currentCar, setCurrentCar] = useState(null);
     const [open, setOpen] = useState(false);
     const [form] = Form.useForm();
+
+    useEffect(() => {
+        getModels();
+        getBrands();
+        getCars();
+        getCategories();
+        getLocations();
+    }, []);
 
     const getCars = () => {
         axios.get('https://autoapi.dezinfeksiyatashkent.uz/api/cars')
@@ -51,16 +75,7 @@ const Cars = () => {
             .catch(err => console.error(err));
     };
 
-    useEffect(() => {
-        getModels();
-        getBrands();
-        getCars();
-        getCategories();
-        getLocations();
-    }, []);
-
-    const addCar = (e) => {
-        e.preventDefault();
+    const addCar = () => {
         const formData = new FormData();
         formData.append('color', color);
         formData.append('year', year);
@@ -85,8 +100,8 @@ const Cars = () => {
         formData.append('location_id', locationId);
         formData.append('city_id', cityId);
 
-        const url = hover ? `https://autoapi.dezinfeksiyatashkent.uz/api/cars/${hover.id}` : `https://autoapi.dezinfeksiyatashkent.uz/api/cars`;
-        const method = hover ? 'PUT' : 'POST';
+        const url = currentCar ? `https://autoapi.dezinfeksiyatashkent.uz/api/cars/${currentCar.id}` : `https://autoapi.dezinfeksiyatashkent.uz/api/cars`;
+        const method = currentCar ? 'PUT' : 'POST';
 
         axios({
             url,
@@ -98,10 +113,8 @@ const Cars = () => {
         })
         .then(res => {
             if (res.data.success) {
-                message.success(hover ? "Updated successfully" : "Added successfully");
-                setHover(null); 
-                setName(''); 
-                setBrandId(''); 
+                message.success(currentCar ? "Updated successfully" : "Added successfully");
+                setCurrentCar(null); 
                 getCars();
                 setOpen(false); 
             }
@@ -127,15 +140,16 @@ const Cars = () => {
             message.error("Error occurred");
         });
     };
+
     const showModal = (item) => {
         setOpen(true);
-        setCurrentCity(item);
+        setCurrentCar(item);
         form.setFieldsValue(item);
     };
 
     const closeModal = () => {
         setOpen(false);
-        setCurrentCity(null);
+        setCurrentCar(null);
         form.resetFields();
     };
 
@@ -145,54 +159,63 @@ const Cars = () => {
                 <Button type='primary' className='home-btn' onClick={() => setOpen(true)}>Add</Button>
             </ul>
             <Modal open={open} footer={null} onCancel={closeModal}>
-                <Form form={form} className='home-form' onFinish={handleSubmit}>
+                <Form form={form} className='home-form' onFinish={addCar}>
                     <Form.Item name="brand_id" label="Brand">
                         <select className='model-select' value={brandId} onChange={(e) => setBrandId(e.target.value)}>
-                            <option value="">Brand</option>{
-                                brands && brands.map((brand, index) => (<option key={index} value={brand.id}>{brand.title}</option>))}
+                            <option value="">Brand</option>
+                            {brands && brands.map((brand, index) => (
+                                <option key={index} value={brand.id}>{brand.title}</option>
+                            ))}
                         </select>
                     </Form.Item>
                     <Form.Item name="model_id" label="Model">
                         <select className='model-select' value={modelId} onChange={(e) => setModelId(e.target.value)}>
-                            <option value="">Model</option>{
-                                models && models.map((model, index) => (<option key={index} value={model.id}>{model.title}</option>))}
+                            <option value="">Model</option>
+                            {models && models.map((model, index) => (
+                                <option key={index} value={model.id}>{model.title}</option>
+                            ))}
                         </select>
                     </Form.Item>
                     <Form.Item name="category_id" label="Category">
                         <select className='model-select' value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
-                            <option value="">Category</option>{
-                                categories && categories.map((category, index) => (<option key={index} value={category.id}>{category.title}</option>))}
+                            <option value="">Category</option>
+                            {categories && categories.map((category, index) => (
+                                <option key={index} value={category.id}>{category.title}</option>
+                            ))}
                         </select>
                     </Form.Item>
                     <Form.Item name="location_id" label="Location">
                         <select className='model-select' value={locationId} onChange={(e) => setLocationId(e.target.value)}>
-                            <option value="">Location</option>{
-                                locations && locations.map((location, index) => (<option key={index} value={location.id}>{location.title}</option>))}
+                            <option value="">Location</option>
+                            {locations && locations.map((location, index) => (
+                                <option key={index} value={location.id}>{location.title}</option>
+                            ))}
                         </select>
                     </Form.Item>
-                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                    <Form.Item wrapperCol={{ offset: 8, span: 18 }}>
                         <Button className='home-btn-a' type="primary" htmlType="submit">Submit</Button>
                     </Form.Item>
                 </Form>
             </Modal>
             <Table dataSource={cars} rowKey="id">
-                <Table.Column title="Brand" dataIndex="brand_title" key="brand_title" />
-                <Table.Column title="Model" dataIndex="name" key="name" />
-                <Table.Column title="Categories" dataIndex="category_title" key="category_title" />
-                <Table.Column title="Locations" dataIndex="location_title" key="location_title" />
-                <Table.Column 
-                    title="Actions" 
-                    key="actions"
-                    render={(text, record) => (
-                        <>
-                            <Button className='model-btn-a' onClick={() => showModal(record)}>Edit</Button> 
-                            <Button className='model-btn-b' onClick={() => deleteCar(record.id)}>Delete</Button>
-                        </>
-                    )}
-                />
-            </Table>
-        </div>
-    );
+            <Table.Column title="Brand" dataIndex="brand_title" key="brand_title" />
+            <Table.Column title="Model" dataIndex="name" key="name" />
+            <Table.Column title="Categories" dataIndex="category_title" key="category_title" />
+            <Table.Column title="Locations" dataIndex="location_title" key="location_title" />
+            <Table.Column 
+                title="Actions" 
+                key="actions"
+                render={(text, record) => (
+                    <>
+                        <Button className='model-btn-a' onClick={() => showModal(record)}>Edit</Button> 
+                        <Button className='model-btn-b' onClick={() => deleteCar(record.id)}>Delete</Button>
+                    </>
+                )}
+            />
+        </Table>
+    </div>
+);
 };
 
 export default Cars;
+
