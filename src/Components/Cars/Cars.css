@@ -32,7 +32,7 @@ th,td{
 .model-btn:hover{
     transform: scale(0.98);
     transition: 1s;
-    background: red;
+    background: rgb(248, 11, 11);
     border: 1px solid #FFFF;
 }
 .model-input:hover{
