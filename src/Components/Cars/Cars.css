@@ -36,7 +36,7 @@ th,td{
     border: 1px solid #f0eeee;
 }
 .model-input:hover{
-    color: #FFFF;
+    color: #f2efef;
     text-align: center;
     transform: scale(0.98);
     transition: 1s;
