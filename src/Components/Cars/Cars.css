@@ -40,7 +40,7 @@ th,td{
     text-align: center;
     transform: scale(0.98);
     transition: 1s;
-    background: blue;
+    background: rgb(8, 8, 252);
     border: 1px solid #FFFF;
 }
 .model-select:hover{
