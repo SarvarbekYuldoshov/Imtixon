@@ -44,7 +44,7 @@ th,td{
     border: 1px solid #f3ecec;
 }
 .model-select:hover{
-    color: #FFFF;
+    color: #f4f2f2;
     transform: scale(0.98);
     transition: 1s;
     background: blue;
