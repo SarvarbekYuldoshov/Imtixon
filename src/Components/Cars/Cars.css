@@ -15,7 +15,7 @@ th,td{
     text-align: center;
 }
 .model-select{
-    border: 1px solid blue;
+    border: 1px solid rgb(19, 19, 253);
     width: 250px;
     height: 40px;
     margin-left: 1px;
