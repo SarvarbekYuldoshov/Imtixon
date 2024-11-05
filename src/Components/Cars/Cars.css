@@ -57,7 +57,7 @@ th,td{
 .model-btn-a{
     background-color: rgb(14, 14, 255);
     color: #efecec;
-    border: 1px solid blue;
+    border: 1px solid rgb(11, 11, 245);
     width: 250px;
     border-radius: 1px;
 }
