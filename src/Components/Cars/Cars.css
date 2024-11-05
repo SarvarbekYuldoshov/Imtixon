@@ -23,7 +23,7 @@ th,td{
 .model-btn{
     width: 250px;
     height: 40px;
-    background: blue;
+    background: rgb(5, 5, 255);
     color: #FFFF;
     margin-left: 1px;
     border: 1px solid blue;
