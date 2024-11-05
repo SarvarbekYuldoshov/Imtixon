@@ -48,7 +48,7 @@ th,td{
     transform: scale(0.98);
     transition: 1s;
     background: rgb(9, 9, 252);
-    border: 1px solid #FFFF;
+    border: 1px solid #f1efef;
 }
 .td{
     border: none;
