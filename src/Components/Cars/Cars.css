@@ -26,7 +26,7 @@ th,td{
     background: rgb(5, 5, 255);
     color: #FFFF;
     margin-left: 1px;
-    border: 1px solid blue;
+    border: 1px solid rgb(14, 14, 248);
     margin-bottom: 6px;
 }
 .model-btn:hover{
